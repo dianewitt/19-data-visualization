@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+    <header class="banner">
+        <h1>Water Quality Project</h1>
+        <p> Chicago Beaches </p>
+        <style>
+            header.banner {
+background-image: url("static/imgs/beach.jpg");
+background-size: cover;
+height: 168px;
+width: 100%;
+padding: 30px;
+font-size:x-large;
+color: whitesmoke;
+}
+        </style>
+    </header>
+  <title>Chicago Beach Conditions</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script type="text/javascript" src="../static/js/config.js"></script>
+  <script type="text/javascript" src="../static/js/data.js"></script>
+  <script type="text/javascript" src="../static/js/weather.js"></script>
+  <script type="text/javascript" src="../static/js/plot.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+    
+      <a class="navbar-brand" href="#">Data Portal</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/data">Water Testing Data</a></li>
+        <li><a href="/graph">Water Safety Chart</a></li>
+        <li><a href="/map">Beach Safety Map</a></li> 
+     </ul>
+    </div>
+  </div>
+</nav>
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+      
+    </div>
+    <div class="col-sm-8 text-left"> 
+      <h1>Chicago Beach Weather Dashboard </h1>
+      <hr>
+      <select id="selDataset" onchange="updateData(this.value)">
+        <option value = "12th Street">12th Street</option>
+        <option value = "57th Street">57th Street</option>
+        <option value = "63rd Street">63rd Street</option>
+        <option value = "Calumet">Calumet</option>
+        <option value = "Columbia">Columbia</option>
+        <option value = "Fargo">Fargo</option>
+        <option value = "Foster">Foster</option>
+        <option value = "Hartigan">Hartigan</option>
+        <option value = "Hartigan (Albion)">Hartigan (Albion)</option>
+        <option value = "Howard">Howard</option>
+        <option value = "Humboldt">Humboldt</option>
+        <option value = "Juneway">Juneway</option>
+        <option value = "Lane">Lane</option>
+        <option value = "Leone">Leone</option>
+        <option value = "Loyola">Loyola</option>
+        <option value = "Margaret T Burroughs">Margaret T Burroughs</option>
+        <option value = "Margaret T Burroughs (31st)">Margaret T Burroughs (31st)</option>
+        <option value = "Marion Mahony Griffin">Marion Mahony Griffin</option>
+        <option value = "Marion Mahony Griffin (Jarvis)">Marion Mahony Griffin (Jarvis)</option>
+        <option value = "Montrose">Montrose</option>
+        <option value = "Montrose Dog">Montrose Dog</option>
+        <option value = "North Avenue">North Avenue</option>
+        <option value = "North Shore">North Shore</option>
+        <option value = "Oak Street">Oak Street</option>
+        <option value = "Oakwood">Oakwood</option>
+        <option value = "Ohio Street">Ohio Street</option>
+        <option value = "Osterman">Osterman</option>
+        <option value = "Rainbow">Rainbow</option>
+        <option value = "Rogers">Rogers</option>
+        <option value = "South Shore">South Shore</option>      
+      </select>
+      
+      <div class="grid-container">
+        <header class="header"></header>
+        
+        <aside class="sidenav" id="weather"></aside>
+        <main class="main" id="myChart"></main>
+        
+        <footer class="footer">
+          <div id="button" aria-describedby="tooltip"><a href="/map" id="maplink">Map Link</a></div>
+        </footer>
+      </div>
+      <style>
+        .grid-container {
+          display: grid;
+          grid-template-columns: 240px 1fr;
+          grid-template-rows: 50px 1fr 50px;
+          grid-template-areas:
+            "sidenav header"
+            "sidenav main"
+            "sidenav footer";
+          height: 70vh;
+        }
+
+        .header {
+          grid-area: header;
+          background-color: #648ca6;
+        }
+
+        .sidenav {
+          grid-area: sidenav;
+          background-color: #394263;
+          color: white;
+          padding: 10 px;
+          text-align: center;
+        }
+
+        .main {
+          grid-area: main;
+          background-color: #8fd4d9;
+        }
+
+        .footer {
+          grid-area: footer;
+          background-color: #648ca6;
+        }
+
+        #tooltip {
+          background-color: black;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            display: none;
+        }
+        #tooltip[data-show] {
+          display: block;
+        }
+        #tooltip[data-popper-placement^='top'] > #arrow {
+          bottom: -4px;
+        }
+
+        #tooltip[data-popper-placement^='bottom'] > #arrow {
+          top: -4px;
+        }
+
+        #tooltip[data-popper-placement^='left'] > #arrow {
+          right: -4px;
+        }
+
+        #tooltip[data-popper-placement^='right'] > #arrow {
+          left: -4px;
+        }
+
+        #maplink{
+          color: white;
+        }
+
+        #button {
+          text-align: right;
+        }
+        #arrow,
+        #arrow::before {
+          position: absolute;
+          width: 8px;
+          height: 8px;
+          z-index: -1;
+        }
+
+        #arrow::before {
+          content: '';
+          transform: rotate(45deg);
+          background: #333;
+        }
+
+      </style>
+
+
+   
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<footer class="container-fluid text-center">
+  <p>Chicago Beach Data</p>
+</footer>
+<div id="tooltip" role="tooltip">
+  View this data on a map!
+  <div id="arrow" data-popper-arrow></div>
+
+</div>
+<script>
+  const button = document.querySelector('#button');
+  const tooltip = document.querySelector('#tooltip');
+
+  // Pass the button, the tooltip, and some options, and Popper will do the
+  // magic positioning for you:
+  Popper.createPopper(button, tooltip, {
+    placement: 'right',
+    modifiers: [
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 8],
+      },
+    },
+    ]
+  });
+  function show() {
+  tooltip.setAttribute('data-show', '');
+  }
+
+  function hide() {
+    tooltip.removeAttribute('data-show');
+  }
+
+  const showEvents = ['mouseenter', 'focus'];
+  const hideEvents = ['mouseleave', 'blur'];
+
+  showEvents.forEach(event => {
+    button.addEventListener(event, show);
+  });
+
+  hideEvents.forEach(event => {
+    button.addEventListener(event, hide);
+  });
+</script>
+
+</body>
+</html>
+ <style>
+   
