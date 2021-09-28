@@ -4,7 +4,7 @@
 **Group Project with:**
 - [mizgutdina](https://github.com/mizgutdina)
 - [alextorres12](https://github.com/alextorres12)
-- [NabihaAsim] (https://github.com/NabihaAsim)
+- [NabihaAsim](https://github.com/NabihaAsim)
 
 **City of Chicago Data**
 
