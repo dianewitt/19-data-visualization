@@ -1,7 +1,10 @@
 ## Chicago Beach Conditions
 
 ---
-**Group Project with https://github.com/mizgutdina https://github.com/alextorres12 https://github.com/NabihaAsim**
+**Group Project with:**
+- [mizgutdina](https://github.com/mizgutdina)
+- [alextorres12](https://github.com/alextorres12)
+- [NabihaAsim] (https://github.com/NabihaAsim)
 
 **City of Chicago Data**
 
